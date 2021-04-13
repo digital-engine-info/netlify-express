@@ -15,13 +15,20 @@ router.get("/", (req, res) => {
 router.get("/another", (req, res) => res.json({ route: req.originalUrl }));
 router.post("/", (req, res) => res.json({ postBody: req.body }));
 router.get("/api/400", (req, res) => {
-  res.writeHead(400, { "Content-Type": "application/json" });
-  res.end(
-    JSON.stringify({
-      error: "Something went wrong (not, it's a joke)",
-      code: 400,
-    })
-  );
+  console.log("params", { query: req.query });
+  if (req.query.bypass === "true") {
+    res.json({ message: "success", error: null, code: 200 });
+    return;
+  } else {
+    res.writeHead(400, { "Content-Type": "application/json" });
+    res.end(
+      JSON.stringify({
+        error: "Something went wrong (not, it's a joke)",
+        code: 400,
+      })
+    );
+    return;
+  }
 });
 
 app.use(morgan("combined"));
