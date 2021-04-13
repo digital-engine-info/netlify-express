@@ -4,6 +4,7 @@ const path = require("path");
 const serverless = require("serverless-http");
 const app = express();
 const bodyParser = require("body-parser");
+const morgan = require("morgan");
 
 const router = express.Router();
 router.get("/", (req, res) => {
@@ -23,6 +24,7 @@ router.get("/api/400", (req, res) => {
   );
 });
 
+app.use(morgan("combined"));
 app.use(bodyParser.json());
 app.use("/.netlify/functions/server", router); // path must route to lambda
 app.use("/", (req, res) => res.sendFile(path.join(__dirname, "../index.html")));
